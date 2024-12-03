@@ -1,3 +1,6 @@
+'''
+Tohle nefunguje, verze 2 je hloupejsi a funkcni:D
+'''
 import numpy as np
 
 
@@ -7,11 +10,11 @@ def test(dy):
     zero = np.count_nonzero(dy == 0)
     minus = np.count_nonzero(dy < 0)
     oor = np.count_nonzero(np.abs(dy) > 3)  # out of range
-    # print(f'\tc\t {plus} {zero} {minus} {oor}')
+
     if plus > 1 and minus > 1:
-        return -1, 0
-    elif oor + zero > 1:
-        return -1, 0
+        print(f'!!\tc\t {plus} {zero} {minus} {oor}')
+    else:
+        print(f'\tc\t {plus} {zero} {minus} {oor}')
 
     if plus == 1:
         a = np.where(dy > 0)[0][0]
@@ -30,7 +33,7 @@ def test(dy):
         else:
             s += ' '+str(e)
             idx.append(e)
-    # print(s)
+    print(s)
     if len(idx) == 1:
         sgn = 1 if plus > minus else -1
         return idx[0], sgn
@@ -57,25 +60,23 @@ for line in data:
             res_comp += 1
 
     if not k:
+        print(a, f'unsafe\t{dx}')
         p, pm = test(dx)
 
         # print(p)
         if p == -1:
             continue
-        # print(a, f'unsafe\t{dx}\tp={p}')
-        if p == 0:
+        elif p == 0:
             # print(f'\tsaved by removing {a[p]} on position {p}')
             res += 1
         elif p == len(dx)-1:
             # print(f'\tsaved by removing {a[p + 1]} on position {p + 1}')
             res += 1
         elif 0 < np.abs(dx[p] + dx[p + 1]) <= 3 and (dx[p] + dx[p + 1])*pm > 0:
-            print(a, f'unsafe\t{dx}\tp={p}')
             print('\t', p, dx[p], dx[p+1])
             print(f'\tsaved by removing {a[p+1]} on position {p+1}')
             res += 1
         elif 0 < np.abs(dx[p-1] + dx[p]) <= 3 and (dx[p-1] + dx[p])*pm > 0:
-            print(a, f'unsafe\t{dx}\tp={p}')
             print('\t', p, dx[p-1], dx[p])
             print(f'\tsaved by removing {a[p]} on position {p}')
             res += 1
