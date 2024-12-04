@@ -1,3 +1,5 @@
+"""Funguje pouze pro čtvercové vstupy"""
+
 def transpose(A):
     B = ['' for _ in range(len(A[0]))]
     for line in A:
@@ -27,25 +29,17 @@ with open('input.txt') as f:
 
 N1, N2 = [], []
 for i, d in enumerate(data):
-    d1 = 'O'*len(d[i:]) + d +'O'*i
+    d1 = 'O'*len(d[i:]) + d +'O'*(i+1)
     N1.append(d1)
-    d2 = 'O'*i + d + 'O'*len(d[i:])
+    d2 = 'O'*(i+1) + d + 'O'*len(d[i:])
     N2.append(d2)
 
 N1 = transpose(N1)
 N2 = transpose(N2)
 w = len(N1[0])
-if N1[0] != 'O'*w:
-    N1 = ['O'*w] + N1
-if N2[0] != 'O'*w:
-    N2 = ['O'*w] + N2
-if N1[-1] != 'O'*w:
-    N1 = N1 + ['O'*w]
-if N2[-1] != 'O'*w:
-    N2 = N2 + ['O'*w]
 
-# for n1, n2 in zip(N1, N2):
-#     print(n1, n2)
+for n1, n2 in zip(N1, N2):
+    print(n1, n2)
 
 res = 0
 for j, n in enumerate(N1):
