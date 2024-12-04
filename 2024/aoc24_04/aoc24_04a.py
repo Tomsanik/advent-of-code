@@ -1,7 +1,3 @@
-import numpy
-import numpy as np
-
-
 def transpose(A):
     B = ['' for _ in range(len(A[0]))]
     for line in A:
