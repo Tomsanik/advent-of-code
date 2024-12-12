@@ -1,52 +1,61 @@
-with open('input.txt') as f:
-    w = 0
-    mapa = ''
-    for line in f:
-        line = line.strip()
-        w = len(line)
-        mapa += line
+zapis = open('input.txt').readline().strip()
+# print(zapis)
 
-antenas = {}
-for i, c in enumerate(mapa):
-    if c != '.' and c != '#':
-        if c in antenas.keys():
-            antenas[c].append(i)
-        else:
-            antenas[c] = [i]
-nodes = []
-for freq in antenas.keys():
-    ants = antenas[freq]
-    if len(ants) == 1:
+disk = []
+i = 0
+for z in zapis:
+    if i % 2 == 1:
+        disk += ['.']*int(z)
+    else:
+        disk += [i//2]*int(z)
+    i += 1
+# disk = ''.join(disk)
+print(disk)
+
+mezery = []
+cisla = []
+k = False
+for i in range(len(zapis)):
+    if k:
+        mezery.append(int(zapis[i]))
+    else:
+        cisla.append(int(zapis[i]))
+    k = not k
+
+print(zapis)
+# print(cisla)
+# print(mezery)
+res = ['' for _ in range(sum([int(c) for c in zapis]))]
+mezery2 = mezery.copy()
+cisla2 = cisla.copy()
+
+for j, n in enumerate(cisla[::-1]):
+    j = len(cisla)-j-1
+    for i, m in enumerate(mezery2):
+        if m >= n:
+            idx = sum(cisla2[:(i+1)])
+            if i > 0:
+                idx += sum(mezery2[:i])
+            idx2 = sum(cisla2[:j]) + sum(mezery2[:j])
+            if idx >= idx2:
+                break
+            # print('\t', idx)
+
+            # print('\t', idx)
+            disk[idx:idx+n] = [j]*n
+
+            # print('\t idx2=', idx2)
+            disk[idx2:idx2+n] = ['.']*n
+            # print(mezery2, cisla2)
+            # print(disk)
+            mezery2[i] -= n
+            cisla2[i] += n
+            break
+print(disk)
+res = 0
+for i, z in enumerate(disk):
+    if z == '.':
         continue
-    for i, x in enumerate(ants[:-1]):
-        for y in ants[i+1:]:
-            k = 0
-            kont = True
-            while kont:
-                kont = False
-                a = x - k*(y-x)
-                b = y + k*(y-x)
-                # print(x, y, a, b)
-                if 0 <= a < len(mapa):
-                    if k*(y // w - x//w) == x//w - a//w:
-                        kont = True
-                        if a not in nodes:
-                            nodes.append(a)
-                if 0 <= b < len(mapa):
-                    if k*(y // w - x//w) == b//w - y//w:
-                        kont = True
-                        if b not in nodes:
-                            nodes.append(b)
-
-                k += 1
-print(antenas)
-for n in nodes:
-    mapa = mapa[:n]+'x'+mapa[n+1:]
-    print(n // w, n % w)
-n = 0
-while n <= len(mapa):
-    print(mapa[n:n+w])
-    n += w
-print(nodes)
-print(len(nodes))
-
+    res += i*int(z)
+    # print(i, z)
+print(res)
